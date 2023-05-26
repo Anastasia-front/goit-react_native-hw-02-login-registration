@@ -63,7 +63,9 @@ export default function Registration() {
     validatePassword();
 
     if (!validationError) {
-      console.log("Form submitted successfully");
+      console.log(
+        `Form submitted successfully! Name: ${name}, email: ${email}, password: ${password}`
+      );
     }
   };
 

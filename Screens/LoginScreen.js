@@ -46,7 +46,9 @@ export default function Login() {
     validatePassword();
 
     if (!validationError) {
-      console.log("Form submitted successfully");
+      console.log(
+        `Form submitted successfully! Email: ${email}, password: ${password}`
+      );
     }
   };
 
