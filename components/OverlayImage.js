@@ -12,7 +12,10 @@ const styles = StyleSheet.create({
     marginTop: 335,
     width: 390,
     height: 510,
-    borderRadius: "25px 25px 0px 0px",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     resizeMode: "contain",
   },
 });
