@@ -7,11 +7,13 @@ const PasswordInput = () => {
   const [password, setPassword] = useState("");
   const [hidden, setHidden] = useState("#F6F6F6");
 
+  //   #F6F6F6
+  // #1b4371
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  //   F6F6F6
-  //   1b4371
+
   const handleFocus = () => {
     setHidden("#1b4371");
   };
@@ -23,7 +25,7 @@ const PasswordInput = () => {
   }, [password]);
 
   return (
-    <View style={{ marginBottom: 50 }}>
+    <View style={{ marginBottom: 30 }}>
       <Input
         placeholder="Пароль"
         secureTextEntry={!showPassword}

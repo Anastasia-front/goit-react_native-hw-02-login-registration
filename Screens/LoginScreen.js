@@ -3,20 +3,52 @@ import {
   Text,
   View,
   ImageBackground,
-  Image,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import OverlayImage from "../components/OverlayImage";
 import CustomButton from "../components/Button";
 import Input from "../components/Input";
 import CustomLink from "../components/Link";
+import Title from "../components/Title";
 import PasswordInput from "../components/PasswordInput";
 import { useState, useEffect } from "react";
 
 export default function Login() {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [validationError, setValidationError] = useState("");
+
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setValidationError("Invalid email");
+      alert("Invalid email: it must contain @ and domain part, invalid space");
+    } else {
+      setValidationError("");
+    }
+  };
+
+  const validatePassword = () => {
+    if (password.length < 6) {
+      setValidationError("Password should be at least 6 characters");
+      alert("Password should be at least 6 characters");
+    } else {
+      setValidationError("");
+    }
+  };
+
+  const handleSubmit = () => {
+    validateEmail();
+    validatePassword();
+
+    if (!validationError) {
+      console.log("Form submitted successfully");
+    }
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -47,31 +79,31 @@ export default function Login() {
           style={styles.imageBackground}
           resizeMode="cover"
         >
-          {/* <View style={{ paddingBottom: keyboardHeight }}> */}
           <View
             style={[styles.overlayContainer, { paddingBottom: keyboardHeight }]}
           >
-            <Image
-              source={require("../img/BG.jpg")}
-              style={styles.overlayImage}
-            />
+            <OverlayImage />
             <View style={styles.formContainer}>
-              <Text style={styles.title}>Увійти</Text>
-
+              <Title title={"Увійти"} top={200} />
               <View style={{ paddingBottom: keyboardHeight }}>
                 <KeyboardAvoidingView
                   behavior={Platform.OS == "ios" ? "padding" : "height"}
                 >
-                  <Input placeholder="Адреса електронної пошти"></Input>
-                  <PasswordInput />
+                  <Input
+                    placeholder="Адреса електронної пошти"
+                    value={email}
+                    onChangeText={setEmail}
+                    onBlur={validateEmail}
+                  />
+                  <PasswordInput
+                    value={password}
+                    onChangeText={setPassword}
+                    onBlur={validatePassword}
+                  />
                 </KeyboardAvoidingView>
               </View>
 
-              <CustomButton
-                width={343}
-                text="Увійти"
-                onPress={() => console.log("log in")}
-              />
+              <CustomButton width={343} text="Увійти" onPress={handleSubmit} />
               <View style={styles.text}>
                 <Text style={styles.textColor}>Немає акаунту?</Text>
                 <CustomLink
@@ -84,7 +116,6 @@ export default function Login() {
               </View>
             </View>
           </View>
-          {/* </View> */}
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -105,13 +136,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  overlayImage: {
-    marginTop: 335,
-    width: 390,
-    height: 510,
-    borderRadius: "25px 25px 0px 0px",
-    resizeMode: "contain",
-  },
   formContainer: {
     position: "absolute",
     top: 32,
@@ -120,13 +144,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: "center",
     justifyContent: "center",
-  },
-  title: {
-    marginTop: 200,
-    marginBottom: 33,
-    fontWeight: 500,
-    fontSize: 30,
-    letterSpacing: 0.01,
   },
   text: {
     flexDirection: "row",
