@@ -5,6 +5,7 @@ import {
   ImageBackground,
   Image,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -14,7 +15,6 @@ import CustomButton from "../components/Button";
 import Input from "../components/Input";
 import CustomLink from "../components/Link";
 import Title from "../components/Title";
-import PasswordInput from "../components/PasswordInput";
 import { useState, useEffect } from "react";
 
 export default function Registration() {
@@ -24,36 +24,61 @@ export default function Registration() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [validationError, setValidationError] = useState("");
+  const [validationError, setValidationError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [hidden, setHidden] = useState("#F6F6F6");
+
+  //   #F6F6F6
+  // #1b4371
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  useEffect(() => {
+    if (password.length === 0) {
+      console.log("666");
+      setHidden("#F6F6F6");
+    } else {
+      console.log("777");
+      setHidden("#1b4371");
+    }
+  }, [password]);
 
   const validateName = () => {
     const nameRegex = /^[a-zA-Z]+$/;
     if (!nameRegex.test(name)) {
-      setValidationError("Invalid name");
       alert(
         "Invalid name: login cannot contain numbers, hyphens, spaces, special characters"
       );
+      //   setValidationError("Invalid name");
+      setValidationError(true);
     } else {
-      setValidationError("");
+      setValidationError(false);
+      //   setValidationError("");
     }
   };
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setValidationError("Invalid email");
+      //   setValidationError("Invalid email");
       alert("Invalid email: it must contain @ and domain part, invalid space");
+      setValidationError(true);
     } else {
-      setValidationError("");
+      //   setValidationError("");
+      setValidationError(false);
     }
   };
 
   const validatePassword = () => {
     if (password.length < 6) {
-      setValidationError("Password should be at least 6 characters");
+      //   setValidationError("Password should be at least 6 characters");
       alert("Password should be at least 6 characters");
+      setValidationError(true);
     } else {
-      setValidationError("");
+      //   setValidationError("");
+      setValidationError(false);
     }
   };
 
@@ -61,11 +86,15 @@ export default function Registration() {
     validateName();
     validateEmail();
     validatePassword();
+    console.log(validationError);
 
-    if (!validationError) {
+    if (validationError === false) {
       console.log(
         `Form submitted successfully! Name: ${name}, email: ${email}, password: ${password}`
       );
+      //   setName("");
+      //   setEmail("");
+      //   setPassword("");
     }
   };
 
@@ -272,7 +301,9 @@ export default function Registration() {
                     placeholder="Логін"
                     value={name}
                     onChangeText={setName}
-                    onBlur={validateName}
+                    onBlur={() => {
+                      validateName();
+                    }}
                   />
                   <Input
                     placeholder="Адреса електронної пошти"
@@ -280,11 +311,22 @@ export default function Registration() {
                     onChangeText={setEmail}
                     onBlur={validateEmail}
                   />
-                  <PasswordInput
+                  <Input
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={setPassword}
                     onBlur={validatePassword}
+                    style={{ position: "relative" }}
                   />
+                  <TouchableOpacity
+                    style={{ position: "absolute", top: 150, right: 20 }}
+                    onPress={togglePasswordVisibility}
+                  >
+                    <Text style={{ color: hidden }}>
+                      {showPassword ? "Сховати" : "Показати"}
+                    </Text>
+                  </TouchableOpacity>
                 </KeyboardAvoidingView>
               </View>
 

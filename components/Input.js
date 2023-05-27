@@ -6,7 +6,7 @@ import {
   Platform,
 } from "react-native";
 
-export default function Input({ placeholder }) {
+export default function Input({ placeholder, onChangeText }) {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -25,6 +25,7 @@ export default function Input({ placeholder }) {
         onFocus={handleFocus}
         onBlur={handleBlur}
         placeholder={placeholder}
+        onChangeText={onChangeText}
       />
     </KeyboardAvoidingView>
   );
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   inputFocused: {
-    backgroundСolor: "white",
+    backgroundColor: "white",
     borderColor: "#FF6C00",
   },
 });

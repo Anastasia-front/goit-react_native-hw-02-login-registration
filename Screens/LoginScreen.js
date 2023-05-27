@@ -4,6 +4,7 @@ import {
   View,
   ImageBackground,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -13,7 +14,6 @@ import CustomButton from "../components/Button";
 import Input from "../components/Input";
 import CustomLink from "../components/Link";
 import Title from "../components/Title";
-import PasswordInput from "../components/PasswordInput";
 import { useState, useEffect } from "react";
 
 export default function Login() {
@@ -21,6 +21,23 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [hidden, setHidden] = useState("#F6F6F6");
+
+  //   #F6F6F6
+  // #1b4371
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  useEffect(() => {
+    if (password === "") {
+      setHidden("#F6F6F6");
+    } else {
+      setHidden("#1b4371");
+    }
+  }, [password]);
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -97,11 +114,22 @@ export default function Login() {
                     onChangeText={setEmail}
                     onBlur={validateEmail}
                   />
-                  <PasswordInput
+                  <Input
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={setPassword}
                     onBlur={validatePassword}
+                    style={{ position: "relative" }}
                   />
+                  <TouchableOpacity
+                    style={{ position: "absolute", top: 150, right: 20 }}
+                    onPress={togglePasswordVisibility}
+                  >
+                    <Text style={{ color: hidden }}>
+                      {showPassword ? "Сховати" : "Показати"}
+                    </Text>
+                  </TouchableOpacity>
                 </KeyboardAvoidingView>
               </View>
 
